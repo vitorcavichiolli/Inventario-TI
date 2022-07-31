@@ -38,6 +38,7 @@ a:focus {
     margin-bottom: 40px;
     box-shadow: 1px 1px 3px black;
     border: 1px solid black;
+    min-width: 510px;
 }
 
 .navbar-btn {
