@@ -1,0 +1,36 @@
+﻿<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3>Portal TI</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+
+        <li>
+            <a href="@Url.Action("Index", "Home")"><span class="glyphicon glyphicon-home"></span>&nbsp; Home</a>
+        </li>
+        <li>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Cadastros &nbsp;<span class="glyphicon glyphicon-chevron-down"></span></a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="@Url.Action("Index", "CadFornecedores")"><span class="glyphicon glyphicon-plane"></span>&nbsp; Fornecedores</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "CadStatus")"><span class="glyphicon glyphicon-adjust"></span>&nbsp; Status dos Dispositivos</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "CadTiposLicencas")"><span class="glyphicon glyphicon-tags"></span>&nbsp; Tipos de Licenças</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "CadTiposDispositivos")"><span class="glyphicon glyphicon-hdd"></span>&nbsp; Tipos de Dispositivos</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "CadUsuarios")"><span class="glyphicon glyphicon-user"></span>&nbsp; Usuários</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "CadInventarios")"><span class="glyphicon glyphicon-list-alt"></span>&nbsp; Inventário</a>
+        </li>
+    </ul>
+
+</nav> 

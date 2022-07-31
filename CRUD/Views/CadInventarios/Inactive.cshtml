@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Editar Item do Inventário";
+}
+
+@model Dominios.crud.TbInventarios
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string retorno = ViewBag.Result;
+    switch (retorno)
+    {
+        case "ok":
+            <div class="modal modal-success fade" id="modal-confirm">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Registro inativado com sucesso!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>O registro @Model.Modelo, id @Model.Id foi inativado corretamente!</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="@Url.Action("Index")" class="btn btn-success">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).click(function (e) {
+                    if (!($(e.target).closest('.modal-content')).length) {
+                        if ($('#modal-confirm').css('display') == 'block') {
+                            window.location.href = '@Url.Action("Index")';
+                        }
+                    }
+                });
+            </script>
+            break;
+        case "ng":
+            <div class="modal modal-danger fade" id="modal-confirm">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Erro ao inativar registro!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>O registro @Model.Modelo, id @Model.Id não foi inativado corretamente!</p>
+                            <br />
+                            <p>Detalhes:</p>
+                            <p>@ViewBag.Ex</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            break;
+    }
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.HiddenFor(m => m.DataCadastro);
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.StatusId)
+
+    <section>
+        <div class="Box Box-default"></div>
+        <div class="Box-header with-border">
+            <b>Editar Registro</b>
+        </div>
+
+        <div class="Box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.TipoDispositivoId, htmlAttributes: new { @class = "control-label" })
+                        @{ 
+                            var appTiposDisp = new Aplicacoes.crud.AppTiposDispositivos();
+                            var sTipo = appTiposDisp.ListarPorId(Model.TipoDispositivoId).Descricao;
+                        }
+                        @Html.Editor("Tipo", new { htmlAttributes = new { @class = "form-control", @Value=sTipo,  @style = "text-transform:uppercase", @readonly = true } })
+                        @Html.HiddenFor(m => m.TipoDispositivoId)
+                        @Html.ValidationMessageFor(m => m.TipoDispositivoId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.LincencaId, htmlAttributes: new { @class = "control-label" })
+                        @{
+                            var appLicencas = new Aplicacoes.crud.AppTiposLicencas();
+                            var sLicenca = appLicencas.ListarPorId(Model.LincencaId).Descricao;
+                        }
+                        @Html.Editor("Licenca", new { htmlAttributes = new { @class = "form-control", @Value = sLicenca, @style = "text-transform:uppercase", @readonly = true } })
+                        @Html.HiddenFor(m => m.LincencaId)
+                        @Html.ValidationMessageFor(m => m.LincencaId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Quantidade, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Quantidade, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Quantidade", @readonly = true } })
+                        @Html.ValidationMessageFor(m => m.Quantidade, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.Fabricante, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Fabricante, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Fabricante", @readonly = true } })
+                        @Html.ValidationMessageFor(m => m.Fabricante, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.Modelo, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Modelo, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Modelo", @readonly = true } })
+                        @Html.ValidationMessageFor(m => m.Modelo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.FornecedorId, htmlAttributes: new { @class = "control-label" })
+                        @{
+                            var appForn = new Aplicacoes.crud.AppFornecedores();
+                            var sForn = appForn.ListarPorId(Model.FornecedorId).Nome;
+                        }
+                        @Html.Editor("Forn", new { htmlAttributes = new { @class = "form-control", @Value = sForn, @style = "text-transform:uppercase", @readonly = true } })
+                        @Html.HiddenFor(m => m.FornecedorId)                        
+                        @Html.ValidationMessageFor(m => m.FornecedorId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.Responsavel, htmlAttributes: new { @class = "control-label" })
+                        @{
+                            var appUser = new Aplicacoes.crud.AppUsuarios();
+                            var sUser = appUser.ListarPorId(Model.Responsavel).Nome;
+                        }
+                        @Html.Editor("Forn", new { htmlAttributes = new { @class = "form-control", @Value = sUser, @style = "text-transform:uppercase", @readonly = true } })
+                        @Html.HiddenFor(m => m.Responsavel)
+                        @Html.ValidationMessageFor(m => m.Responsavel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.DataAtivacao, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            @Html.EditorFor(m => m.DataAtivacao, "{0:dd/MM/yyyy}", new { htmlAttributes = new { @class = "form-control data-val", @style = "text-transform:uppercase", @placeholder = "Data de Ativação", @autocomplete = "off", @readonly = true } })
+
+                        </div>
+                        @Html.ValidationMessageFor(m => m.DataAtivacao, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.DataGarantia, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            @Html.EditorFor(m => m.DataGarantia, "{0:dd/MM/yyyy}", new { htmlAttributes = new { @class = "form-control data-val", @style = "text-transform:uppercase", @placeholder = "Data Final da Garantia", @autocomplete = "off", @readonly = true } })
+
+                        </div>
+                        @Html.ValidationMessageFor(m => m.DataGarantia, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Depreciacao, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Depreciacao, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Tempo para depreciação", @readonly = true } })
+                        @Html.ValidationMessageFor(m => m.Depreciacao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.Observacoes, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(m => m.Observacoes, new { @class = "form-control", @style = "text-transform:uppercase; resize:none", @rows = "3", @readonly = true })
+                        @Html.ValidationMessageFor(m => m.Observacoes, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+
+            <div class="pull-right">
+                <a class="btn btn-default" href="@Url.Action("Index")"><span class="glyphicon glyphicon-hand-left"></span> Voltar</a>
+                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-ban-circle"></span> Inativar</button>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </section>
+
+
+    <link href="~/Content/iao-alert.css" rel="stylesheet" />
+    <script src="~/Scripts/iao-alert.jquery.js"></script>
+
+}
+
+<script>
+    $(document).ready(function () {
+        $('#modal-confirm').modal("show");
+        
+    });
+
+    
+
+</script>
+

@@ -1,0 +1,244 @@
+﻿.dashboard {
+    box-shadow: inset 0 0 6px black;
+    width: 100%;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #353b48;
+    width: 100%;
+}
+
+.dashboard-card {
+    border-radius: 5px;
+    box-shadow: 0 0 6px black;
+    padding: 10px;
+    background-color: #2f3640;
+    border: 1px solid black;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.card-content {
+    width: 100%;
+}
+
+.info-box {
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 0 3px black;
+    width: 100%;
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+.info-box:hover{
+    transform: scale(1.02);
+}
+
+    .info-box:hover .info-box-icon i {
+        transform:  rotate(15deg);
+    }
+.info-box-icon i {
+    transition: all 0.3s ease-in-out;
+}
+
+.info-box-title {
+    margin: 0;
+    margin-left: 120px;
+    padding: 10px;
+    padding-bottom: 0;
+    word-wrap: break-word;
+    white-space: normal !important;
+    font-size: 22px;
+}
+
+.info-box-text {
+    margin: 0;
+    margin-left: 120px;
+    padding: 10px;
+    width: 100%;
+    color: white;
+    word-wrap: break-word;
+}
+
+.info-box-icon {
+    display: block;
+    float: left;
+    height: 120px;
+    width: 120px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 120px;
+    background-color: rgb(0 0 0 / 20%);
+}
+
+.info-box-content {
+    display: block;
+    height: 120px;
+}
+
+.info-box-body {
+    position: relative;
+    background-color: rgb(0 0 0 / 25%);
+    margin-left: 130px;
+    margin-right: 10px;
+    margin-top:20px;
+}
+
+.info-box-footer{
+    position: absolute;
+    width:100%;
+    bottom:0;
+}
+
+.info-box-progress {
+    height: 10px;
+    background-color: white;
+    
+}
+
+
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    color: black !important;
+}
+
+.btn-abrir-forn{
+    font-size: 17px;
+    cursor:pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-abrir-forn span {
+        transition: all 0.2s ease-in-out;
+    }
+
+.btn-abrir-forn:hover span{
+    transform: scale(1.1);
+}
+
+.carousel-container {
+    width: 100%;
+}
+
+.sm-box-container {
+    width: 100%;
+    padding: 20px;
+}
+
+.sm-box {
+    width: 100%;
+    border: 1px solid black;
+    position: relative;
+    border-radius:5px;
+    box-shadow: 0 0 6px black;
+}
+    .sm-box:hover .sm-box-icon {
+        transform: scale(1.1) ;
+    }
+
+.sm-box-content {
+    padding: 10px;
+    width: 100%;
+    position: relative;
+    height: 120px;
+    border-radius: 5px;
+}
+
+.sm-box-header{
+    position: absolute;
+    top:0;
+    width: 100%;
+}
+
+.sm-box-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 75px;
+    top:10px;
+    color: rgb(0 0 0 / 22%);
+    transition: all 0.3s ease-in-out;
+}
+
+.sm-box-body {
+    position: absolute;
+    top: 35px;
+    width: 100%;
+}
+
+.sm-box-body p {
+   padding:0;
+   margin: 0;
+   color: whitesmoke;
+   font-weight:300;
+}
+
+.sm-box-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(0 0 0 / 22%);
+    padding:5px;
+}
+
+.sm-box-footer a {
+   width:100%;
+   display:block;
+   text-align: center;
+}
+
+.info-box-2 {
+    width: 100%;
+    position: relative;
+    border: 1px solid black;
+    box-shadow: 0 0 6px black;
+    border-radius: 5px;
+    padding:10px;
+}
+
+.info-box-2-content {
+    width: 100%;
+    padding: 10px;
+    position: relative;
+    border-radius: 5px;
+    height: 110px;
+}
+
+.info-box-2-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 110px;
+    align-items: center;
+    display: flex;
+    font-size: 50px;
+    justify-content: center;
+    text-align: center;
+    border-radius:5px;
+   
+}
+
+    .info-box-2-icon i {
+        transition: all 0.3s ease-in-out;
+    }
+
+.info-box-2-header {
+    position: absolute;
+    top: 0;
+    left: 110px;
+    width: calc(100% - 110px);
+    padding: 0 10px;
+}
+
+.info-box-2-body {
+    position: absolute;
+    top: 35px;
+    left: 110px;
+    width: calc(100% - 110px);
+    padding: 0 10px;
+}
+
+.info-box-2:hover .info-box-2-icon i {
+    transform: scale(1.1) rotate(360deg);
+   
+}

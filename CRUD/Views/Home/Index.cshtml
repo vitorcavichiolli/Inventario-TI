@@ -1,0 +1,411 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/dashboard.css" rel="stylesheet" />
+
+@{
+    var appInventario = new Aplicacoes.crud.AppInventario();
+    var appTiposDispositivos = new Aplicacoes.crud.AppTiposDispositivos();
+    var appLicencas = new Aplicacoes.crud.AppTiposLicencas();
+    var appForn = new Aplicacoes.crud.AppFornecedores();
+    var appUser = new Aplicacoes.crud.AppUsuarios();
+    var todos_itens = appInventario.ListarTodos();
+    var itens_ativos = todos_itens.Where(x => x.StatusId == 1).ToList();
+    var itens_inativos = todos_itens.Where(x => x.StatusId == 2).ToList();
+    var count_pouca_depre = 0;
+    var count_media_depre = 0;
+    var count_alta_depre = 0;
+    var perc_baixa_depre = 0.0;
+    var perc_media_depre = 0.0;
+    var perc_alta_depre = 0.0;
+    for (int i = 0; i <= itens_ativos.Count - 1; i++)
+    {
+        if (itens_ativos[i].DataAtivacao != null)
+        {
+            var data_ativacao = (DateTime)itens_ativos[i].DataAtivacao;
+            var data_depreciacao = data_ativacao.AddMonths((int)itens_ativos[i].Depreciacao);
+            TimeSpan tempo_total = data_depreciacao - data_ativacao;
+            var tempo_restante = data_depreciacao - DateTime.Now;
+            var perc_depre = 100 - ((tempo_restante.TotalDays * 100) / tempo_total.TotalDays);
+            if (perc_depre <= 40)
+            {
+                count_pouca_depre++;
+            }
+            else if (perc_depre > 40 && perc_depre <= 70)
+            {
+                count_media_depre++;
+            }
+            else
+            {
+                count_alta_depre++;
+            }
+        }
+    }
+
+    perc_baixa_depre = ((count_pouca_depre * 100) / (itens_ativos.Count > 0 ? itens_ativos.Count : 1));
+    perc_media_depre = ((count_media_depre * 100) / (itens_ativos.Count > 0 ? itens_ativos.Count : 1));
+    perc_alta_depre = ((count_alta_depre * 100) / (itens_ativos.Count > 0 ? itens_ativos.Count : 1));
+}
+
+<section class="content">
+    <div class="Box-body">
+        <div class="dashboard">
+            <div class="dashboard-card chart-card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-box bg-green">
+                                        <span class="info-box-icon">
+                                            <i class="glyphicon glyphicon-check"></i>
+                                        </span>
+                                        <div class="info-box-content">
+                                            <div class="info-box-header">
+                                                <h3 class="info-box-title">Itens pouco depreciados</h3>
+                                            </div>
+                                            <div class="info-box-body">
+                                                <div class="info-box-progress" style="width:@perc_baixa_depre%;"></div>
+                                            </div>
+                                            <div class="info-box-footer">
+                                                <p class="info-box-text">@perc_baixa_depre% dos itens </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-box bg-yellow">
+                                        <span class="info-box-icon">
+                                            <i class="glyphicon glyphicon-time"></i>
+                                        </span>
+                                        <div class="info-box-content">
+                                            <div class="info-box-header">
+                                                <h3 class="info-box-title">Itens que requerem atenção</h3>
+                                            </div>
+                                            <div class="info-box-body">
+                                                <div class="info-box-progress" style="width:@perc_media_depre%"></div>
+                                            </div>
+                                            <div class="info-box-footer">
+                                                <p class="info-box-text">@perc_media_depre% dos itens </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-box bg-red">
+                                        <span class="info-box-icon">
+                                            <i class="glyphicon glyphicon-wrench"></i>
+                                        </span>
+                                        <div class="info-box-content">
+                                            <div class="info-box-header">
+                                                <h3 class="info-box-title">Itens depreciados</h3>
+                                            </div>
+                                            <div class="info-box-body">
+                                                <div class="info-box-progress" style="width:@perc_alta_depre%"></div>
+                                            </div>
+                                            <div class="info-box-footer">
+                                                <p class="info-box-text">@perc_alta_depre% dos itens </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Box-header with-border">
+                <b>Itens mais depreciados</b>
+            </div>
+            <div class="sm-box-container">
+
+                <div class="row">
+
+                    @{
+                        var ordemDepre = itens_ativos.Select(s => new
+                        {
+                            Id = s.Id,
+                            Tipo = s.TipoDispositivoId,
+                            Modelo = s.Modelo,
+                            Perc_Depre = (100 - (((s.DataAtivacao.AddMonths((int)s.Depreciacao) - DateTime.Now).TotalDays * 100) / (s.DataAtivacao.AddMonths((int)s.Depreciacao) - s.DataAtivacao).TotalDays))
+                        }).OrderByDescending(x => x.Perc_Depre).Take(6).ToList();
+
+                        for (int i = 0; i <= ordemDepre.Count - 1; i++)
+                        {
+                            var classe = "";
+                            if (ordemDepre[i].Perc_Depre <= 40)
+                            {
+
+                                classe = "bg-green";
+                            }
+                            else if (ordemDepre[i].Perc_Depre > 40 && ordemDepre[i].Perc_Depre <= 70)
+                            {
+                                classe = "bg-yellow";
+                            }
+                            else
+                            {
+                                classe = "bg-red";
+                            }
+                            <div class="col-md-2">
+
+                                <div class="sm-box @classe">
+                                    <div class="sm-box-content ">
+                                        <span class="sm-box-icon glyphicon glyphicon-warning-sign"></span>
+                                        <div class="sm-box-header">
+                                            <h4 class="sm-box-title">Item: @ordemDepre[i].Id</h4>
+                                        </div>
+                                        <div class="sm-box-body">
+                                            <p class="sm-box-text">@appTiposDispositivos.ListarPorId(ordemDepre[i].Tipo).Descricao.ToUpper() </p>
+                                            <p class="sm-box-text">@ordemDepre[i].Modelo.ToUpper() </p>
+                                        </div>
+                                    </div>
+                                    <div class="sm-box-footer">
+                                        <a href="@Url.Content("/CadInventarios/Edit?id=" + ordemDepre[i].Id)">Abrir <span class="glyphicon glyphicon-hand-right"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    }
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="dashboard-card chart-card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <table class="table table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">Items adicionados recentemente</th>
+                                    </tr>
+                                    <tr>
+                                        <th valign="middle">Tipo de Dispositivo</th>
+                                        <th valign="middle">Item</th>
+                                        <th valign="middle">Fabricante</th>
+                                        <th valign="middle">Data de Cadastro</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var recentes = todos_itens.OrderBy(x => x.DataCadastro).Take(5).ToList();
+                                        for (int i = 0; i <= recentes.Count - 1; i++)
+                                        {
+                                            var _tipo = appTiposDispositivos.ListarPorId(recentes[i].TipoDispositivoId);
+
+
+                                            <tr>
+                                                <td valign="middle">
+                                                    @_tipo.Descricao.ToUpper()
+                                                </td>
+                                                <td valign="middle">
+                                                    @recentes[i].Modelo.ToUpper()
+                                                </td>
+                                                <td valign="middle">
+                                                    @recentes[i].Fabricante.ToUpper()
+                                                </td>
+                                                <td valign="middle">
+                                                    @recentes[i].DataCadastro.ToString("G")
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-6">
+                            <table class="table table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">Principais fornecedores</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center" valign="middle">Fornecedor</th>
+                                        <th class="text-center" valign="middle">Quantidade de itens</th>
+                                        <th class="text-center" valign="middle">Percentual dos itens</th>
+                                        <th class="text-center" valign="middle"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+
+                                        //var topForns = todos_itens.GroupBy(p => p.FornecedorId).Select(g => g.OrderByDescending(p => p.FornecedorId).FirstOrDefault()).ToList();
+                                        var topForns = todos_itens.GroupBy(c => c.FornecedorId).Select(g => new { g.Key, SUM = g.Sum(s => s.Quantidade) }).OrderByDescending(x => x.SUM).Take(5).ToList();
+
+                                        for (int i = 0; i <= topForns.Count - 1; i++)
+                                        {
+                                            var _forn = appForn.ListarPorId(topForns[i].Key);
+                                            var qtdItens = topForns[i].SUM;
+                                            var total = topForns.Sum(x => x.SUM);
+                                            var perc = (qtdItens * 100) / (total > 0 ? total : 1);
+                                            <tr>
+                                                <td valign="middle">
+                                                    @_forn.Nome.ToUpper()
+                                                </td>
+                                                <td align="center" valign="middle">
+                                                    @qtdItens
+                                                </td>
+                                                <td align="center" valign="middle">
+                                                    @perc%
+                                                </td>
+                                                <td align="center" valign="middle">
+                                                    <a class="btn-abrir-forn" href="@Url.Content("/CadFornecedores/Edit?id=" + _forn.Id)"><span class="glyphicon glyphicon-search"></span></a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <div style="margin-bottom:20px;">
+                        <canvas id="chartAtivoInativo" style="max-height: 350px"></canvas>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div class="dashboard-card chart-card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <table class="table table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">Usuários com mais itens</th>
+                                    </tr>
+                                    <tr>
+                                        <th valign="middle">Usuário</th>
+                                        <th valign="middle">Quantidade</th>
+                                        <th valign="middle">Percentual</th>
+                                        <th valign="middle">Data de Cadastro</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var topUsers = todos_itens.GroupBy(c => c.Responsavel).Select(g => new { g.Key, SUM = g.Sum(s => s.Quantidade) }).OrderByDescending(x => x.SUM).Take(5).ToList();
+
+                                        for (int i = 0; i <= topUsers.Count - 1; i++)
+                                        {
+                                            var _user = appUser.ListarPorId(topUsers[i].Key);
+                                            var qtdItens = topUsers[i].SUM;
+                                            var total = topUsers.Sum(x => x.SUM);
+                                            var perc = (qtdItens * 100) / (total > 0 ? total : 1);
+
+                                            <tr>
+                                                <td valign="middle">
+                                                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Imagem do usuário" class="img-circle" style="width: 32px"/>
+                                                    &nbsp; @_user.Nome.ToUpper()
+                                                </td>
+                                                <td valign="middle">
+                                                    @qtdItens
+                                                </td>
+                                                <td valign="middle">
+                                                    @perc%
+                                                </td>
+                                                
+                                                <td valign="middle">
+                                                    @_user.DataCadastro.ToString("G")
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-md-6 chart-licenca">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="info-box-2 bg-white">
+                                                <div class="info-box-2-content">
+                                                    <span class="info-box-2-icon bg-purple">
+                                                        <i class=" glyphicon glyphicon-tags"></i>
+                                                    </span>
+                                                    <div class="info-box-2-header">
+                                                        <h4 class="info-box-2-title color-black">Aluguel</h4>
+                                                    </div>
+                                                    <div class="info-box-2-body">
+                                                        <p class="color-black">@todos_itens.Where(x => x.LincencaId == 1).ToList().Count itens alugados</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="info-box-2 bg-white">
+                                                <div class="info-box-2-content">
+                                                    <span class="info-box-2-icon bg-light-blue">
+                                                        <i class=" glyphicon glyphicon-tags"></i>
+                                                    </span>
+                                                    <div class="info-box-2-header">
+                                                        <h4 class="info-box-2-title color-black">Compra</h4>
+                                                    </div>
+                                                    <div class="info-box-2-body">
+                                                        <p class="color-black">@todos_itens.Where(x => x.LincencaId == 2).ToList().Count itens comprados</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <canvas id="licencasChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.2/chart.min.js" integrity="sha512-zjlf0U0eJmSo1Le4/zcZI51ks5SjuQXkU0yOdsOBubjSmio9iCUp8XPLkEAADZNBdR9crRy3cniZ65LF2w8sRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/Scripts/dashboard.js"></script>
+<script>
+    $(document).ready(function () {
+        var canvas = document.getElementById("myChart");
+        canvas.height = $('.chart-card').height();
+
+        var canvas2 = document.getElementById("licencasChart");
+        canvas2.height = $('.chart-licenca').height();
+
+        gerarGrafico();
+        gerarChartAtivoInativo();
+        gerarChartLicencas();
+
+    });
+
+
+</script>

@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Status dos Dispositivos";
+}
+
+@model IEnumerable<Dominios.crud.TbStatusDispositivos>
+    @{ 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<section class="content">
+    <div class="Box Box-default">
+        <div class="Box-header with-border">
+            <a class="btn " href="@Url.Action("Create")" style="background-color: #2980b9"><span class="glyphicon glyphicon-plus"> Novo Registro</span></a>
+        </div>
+    </div>
+    <br />
+    <div class="Box-body">
+        <table id="tabela" class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>@Html.DisplayNameFor(m => m.Id)</th>
+                    <th>@Html.DisplayNameFor(m => m.Descricao)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a class="btn btn-success btn-sm" href="@Url.Action("Edit", new {id = item.Id})"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Descricao)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <div class="Box Box-comments">
+            <div class="form-group">
+                <div class="row small">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <table>
+                            <tr>
+                                <td colspan="2">Ações</td>
+                            </tr>
+                            <tr>
+                                <td width="20%" align="center"><span class="glyphicon glyphicon-pencil"></span></td>
+                                <td width="80%">&nbsp; Editar</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    td{
+        text-transform:uppercase;
+    }
+
+    
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#tabela").DataTable({
+            'pageLenght': 25,
+            'bProcessing': true,
+            'bStateSave': false,
+            'order': [1, 'desc'],
+            'columDefs': [
+                { 'width': '5%', 'targets': 0 },
+                { 'width': '10%', 'targets': 1 },
+                { 'width': '85%', 'targets': 2 }
+            ]
+        });
+    });
+</script>

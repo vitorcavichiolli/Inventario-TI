@@ -1,0 +1,256 @@
+﻿/*
+    DEMO STYLE
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #2f3640;
+    color: white;
+}
+
+p {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.navbar {
+    padding: 15px 10px;
+    background: #353b48;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px black;
+    border: 1px solid black;
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #3498db;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+    #sidebar.active {
+        margin-left: -250px;
+    }
+
+    #sidebar .sidebar-header {
+        padding: 20px;
+        background: #2980b9;
+    }
+
+    #sidebar ul.components {
+        padding: 20px 0;
+        border-bottom: 1px solid #47748b;
+    }
+
+    #sidebar ul p {
+        color: #fff;
+        padding: 10px;
+    }
+
+    #sidebar ul li a {
+        padding: 10px;
+        font-size: 1.1em;
+        display: block;
+    }
+
+        #sidebar ul li a:hover {
+            color: #7386d5;
+            background: #fff;
+        }
+
+    #sidebar ul li.active > a,
+    a[aria-expanded="true"] {
+        color: #fff;
+        background: #2980b9;
+    }
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #2980b9;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+    ul.CTAs a {
+        text-align: center;
+        font-size: 0.9em !important;
+        display: block;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+a.download {
+    background: #fff;
+    color: #7386d5;
+}
+
+a.article,
+a.article:hover {
+    background: #2980b9 !important;
+    color: #fff !important;
+}
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+
+        #sidebar.active {
+            margin-left: 0;
+        }
+
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: whitesmoke !important;
+}
+
+
+
+.with-border{
+    border: none !important;
+    border-bottom: 1px solid !important;
+}
+
+.box-footer {
+    padding: 15px 10px;
+    background: #2f3640;
+    border: none;
+    border-radius: 0;
+    margin-top: 80px;
+    box-shadow: 0px 0px 6px black;
+    min-height: 64px;
+}
+
+.content{
+    position: relative;
+}
+
+.paginate_button {
+    background-color: white !important;
+}
+
+.modal-success .modal-content{
+    background-color: #1abc9c;
+    color: white;
+}
+
+.modal-danger .modal-content {
+    background-color: #eb4d4b;
+    color: white;
+}
+
+.modal-body p{
+    color: white !important; 
+}
+
+.select2-results__option, .select2-search__field, .datepicker-days, .dataTables_length select option, .datepicker-months, .datepicker-years, .datepicker-decades, .datepicker-centuries {
+    color: black;
+}
+
+.select2-selection {
+    min-height: 34px !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+#tabela{
+    margin-bottom: 20px;
+}
+
+
+.bg-green {
+    background-color: #16a085;
+}
+
+.bg-yellow {
+    background-color: #f39c12;
+}
+
+.bg-red {
+    background-color: #c0392b;
+}
+
+.bg-purple {
+    background-color: #9b59b6;
+}
+
+.bg-orange {
+    background-color: #e67e22;
+}
+
+.bg-light-blue {
+    background-color: #74b9ff;
+}
+
+.bg-white{
+    background-color: white;
+}
+
+.color-black{
+    color:black;
+}

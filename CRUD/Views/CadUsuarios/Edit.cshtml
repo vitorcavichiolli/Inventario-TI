@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Editar Usuário";
+}
+
+@model Dominios.crud.TbUsuarios
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string retorno = ViewBag.Result;
+    switch (retorno)
+    {
+        case "ok":
+            <div class="modal modal-success fade" id="modal-confirm">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Registro editado com sucesso!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>O usuário @Model.Nome, id @Model.Id foi editado corretamente!</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="@Url.Action("Index")" class="btn btn-success">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).click(function (e) {
+                    if (!($(e.target).closest('.modal-content')).length) {
+                        if ($('#modal-confirm').css('display') == 'block') {
+                            window.location.href = '@Url.Action("Index")';
+                        }
+                    }
+                });
+            </script>
+            break;
+        case "ng":
+            <div class="modal modal-danger fade" id="modal-confirm">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Erro ao editar registro!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>O usuário @Model.Nome, id @Model.Id não foi editado corretamente!</p>
+                            <br />
+                            <p>Detalhes:</p>
+                            <p>@ViewBag.Ex</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            break;
+    }
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.DataCadastro);
+    @Html.HiddenFor(m => m.Id)
+
+    <section>
+        <div class="Box Box-default"></div>
+        <div class="Box-header with-border">
+            <b>Editar Registro</b>
+        </div>
+
+        <div class="Box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.Nome, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Nome, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Nome" } })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.Matricula, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(m => m.Matricula, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:uppercase", @placeholder = "Nome", @onkeypress = "return isNumberKey(event)" } })
+                        @Html.ValidationMessageFor(m => m.Matricula, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+
+            <div class="pull-right">
+                <a class="btn btn-default" href="@Url.Action("Index")"><span class="glyphicon glyphicon-hand-left"></span> Voltar</a>
+                <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check"></span> Salvar</button>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+
+}
+
+<script>
+    $(document).ready(function () {
+        $('#modal-confirm').modal("show");
+
+
+    });
+    function isNumberKey(e) {
+        var charCode = (e.which) ? e.which : e.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            if (charCode == 44) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+</script>

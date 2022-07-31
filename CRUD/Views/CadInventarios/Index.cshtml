@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "Inventário";
+}
+    @model IEnumerable<Dominios.crud.TbInventarios>
+    @{ 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var appStatus = new Aplicacoes.crud.AppStatusDispositivos();
+
+    }
+
+<section class="content">
+    <div class="Box Box-default">
+        <div class="Box-header with-border">
+            <a class="btn " href="@Url.Action("Create")" style="background-color: #2980b9"><span class="glyphicon glyphicon-plus"> Novo Registro</span></a>
+        </div>
+    </div>
+    <br />
+    <div class="Box-body">
+        <table id="tabela" class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>@Html.DisplayNameFor(m => m.Id)</th>
+                    <th>@Html.DisplayNameFor(m => m.TipoDispositivoId)</th>
+                    <th>@Html.DisplayNameFor(m => m.Fabricante)</th>
+                    <th>@Html.DisplayNameFor(m => m.Modelo)</th>
+                    <th>@Html.DisplayNameFor(m => m.FornecedorId)</th>
+                    <th>@Html.DisplayNameFor(m => m.Responsavel)</th>
+                    <th>@Html.DisplayNameFor(m => m.DataCadastro)</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var status = appStatus.ListarPorId(item.StatusId);
+                    var cor = status.CorLegenda;
+                    <tr>
+                        <td style="text-align: center; vertical-align:middle">
+                            <span class="glyphicon glyphicon-certificate" style="color:@cor"></span>
+                            <i class="hidden">@status.Descricao</i>
+                        </td>
+                        <td style="text-align: center; vertical-align:middle">
+                            <a class="btn btn-success btn-sm" href="@Url.Action("Edit", new {id = item.Id})"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", new {id = item.Id})"><span class="glyphicon glyphicon-trash"></span></a>
+                            <a class="btn btn-warning btn-sm" href="@Url.Action("Inactive", new {id = item.Id})"><span class="glyphicon glyphicon-ban-circle"></span></a>
+
+                        </td>
+                        <td style="vertical-align:middle">
+                            @Html.DisplayFor(m => item.Id)
+                        </td>
+                        <td style="vertical-align:middle">
+                            @{
+                                var appTiposDisp = new Aplicacoes.crud.AppTiposDispositivos();
+                                var sDispo = appTiposDisp.ListarPorId(item.TipoDispositivoId).Descricao;
+                            }
+                            @sDispo
+                        </td>
+                        <td style="vertical-align:middle">
+                            @Html.DisplayFor(m => item.Fabricante)
+                        </td>
+                        <td style="vertical-align:middle">
+                            @Html.DisplayFor(m => item.Modelo)
+                        </td>
+                        <td style="vertical-align:middle">
+                            @{
+                                var appForn = new Aplicacoes.crud.AppFornecedores();
+                                var sForn = appForn.ListarPorId(item.FornecedorId).Nome;
+                            }
+                            @sForn
+                        </td>
+                        <td>
+                            @{
+                                var appUser = new Aplicacoes.crud.AppUsuarios();
+                                var sUser = appUser.ListarPorId(item.Responsavel).Nome;
+                            }
+                            @sUser
+                        </td>
+                        <td>
+                            @{
+                                var data = item.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss");
+                                var en_data = Convert.ToDateTime(item.DataCadastro).ToString("yyyy/MM/dd HH:mm:ss");
+                                <i class="hidden">@en_data</i>@data
+                            }
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <div class="Box Box-comments">
+            <div class="form-group">
+                <div class="row small">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-2">
+                        <table>
+                            <tr colspan="2">STATUS</tr>
+                            @{ 
+                                var lista_status = appStatus.ListarTodos();
+                                for (int i = 0; i <= lista_status.Count - 1; i++)
+                                {
+                                    <tr>
+                                        <td width="20%" align="center"><span class="glyphicon glyphicon-certificate" style="color:@lista_status[i].CorLegenda"></span></td>
+                                        <td width="80%">&nbsp; @lista_status[i].Descricao</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                    <div class="col-md-2">
+                        <table>
+                            <tr>
+                                <td colspan="2">Ações</td>
+                            </tr>
+                            <tr>
+                                <td width="20%" align="center"><span class="glyphicon glyphicon-pencil"></span></td>
+                                <td width="80%">&nbsp; Editar</td>
+                            </tr>
+                            <tr>
+                                <td width="20%" align="center"><span class="glyphicon glyphicon-trash"></span></td>
+                                <td width="80%">&nbsp; Deletar</td>
+                            </tr>
+                            <tr>
+                                <td width="20%" align="center"><span class="glyphicon glyphicon-ban-circle"></span></td>
+                                <td width="80%">&nbsp; Inativar</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    td{
+        text-transform:uppercase;
+    }
+
+    
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#tabela").DataTable({
+            'pageLenght': 25,
+            'bProcessing': true,
+            'bStateSave': false,
+            'order': [1, 'desc'],
+            
+        });
+    });
+</script>
